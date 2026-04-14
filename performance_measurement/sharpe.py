@@ -18,6 +18,18 @@ def annualised_sharpe(returns, N=252):
 
     The function assumes that the returns are the excess of
     those compared to a benchmark.
+
+    Parameters
+    ----------
+    returns : `pd.Series`
+        The pandas Series of returns
+    N : `int`, optional
+        The number of trading periods in a year (default is 252)
+
+    Returns
+    -------
+    `float`
+        The annualised Sharpe ratio
     """
     return np.sqrt(N) * returns.mean() / returns.std()
 
@@ -26,6 +38,16 @@ def equity_sharpe(ticker):
     """
     Calculates the annualised Sharpe ratio based on the daily
     returns of an equity ticker symbol listed in AlphaVantage.
+
+    Parameters
+    ----------
+    ticker : `pd.DataFrame`
+        The DataFrame containing historical pricing data for the ticker
+
+    Returns
+    -------
+    `float`
+        The annualised Sharpe ratio for the equity
     """
     # Use the percentage change method to easily calculate daily returns
     ticker['daily_ret'] = ticker['Adj Close'].pct_change()

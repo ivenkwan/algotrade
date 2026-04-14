@@ -17,6 +17,22 @@ def var_cov_var(P, c, mu, sigma):
     using confidence level c, with mean of returns mu
     and standard deviation of returns sigma, on a portfolio
     of value P.
+
+    Parameters
+    ----------
+    P : `float`
+        The total value of the portfolio
+    c : `float`
+        The confidence level (e.g. 0.99 for 99%)
+    mu : `float`
+        The mean of the returns
+    sigma : `float`
+        The standard deviation of the returns
+
+    Returns
+    -------
+    `float`
+        The calculated Value-at-Risk (VaR)
     """
     alpha = norm.ppf(1-c, mu, sigma)
     return P - P*(alpha + 1)

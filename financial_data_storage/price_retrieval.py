@@ -28,7 +28,12 @@ con = mdb.connect(DB_HOST, DB_USER, DB_PASS, DB_NAME)
 def obtain_list_of_db_tickers():
     """
     Obtains a list of the ticker symbols in the database.
-    """ 
+
+    Returns
+    -------
+    `list`
+        A list of tuples containing (id, ticker) for each symbol
+    """
     cur = con.cursor()
     cur.execute("SELECT id, ticker FROM symbol")
     con.commit()
@@ -40,6 +45,16 @@ def construct_alpha_vantage_symbol_call(ticker):
     """
     Construct the full API call to AlphaVantage based on the user
     provided API key and the desired ticker symbol.
+
+    Parameters
+    ----------
+    ticker : `str`
+        The ticker symbol, e.g. 'AAPL'
+
+    Returns
+    -------
+    `str`
+        The full API call for a ticker time series
     """
     return "%s/%s&symbol=%s&outputsize=full&apikey=%s" % (
         ALPHA_VANTAGE_BASE_URL,
@@ -54,6 +69,16 @@ def get_daily_historic_data_alphavantage(ticker):
     Use the generated API call to query AlphaVantage with the
     appropriate API key and return a list of price tuples
     for a particular ticker.
+
+    Parameters
+    ----------
+    ticker : `str`
+        The ticker symbol, e.g. 'AAPL'
+
+    Returns
+    -------
+    `list`
+        A list of tuples containing (date, open, high, low, close, volume, adj_close)
     """
     av_url = construct_alpha_vantage_symbol_call(ticker)
 
@@ -88,6 +113,15 @@ def insert_daily_data_into_db(data_vendor_id, symbol_id, daily_data):
     """
     Takes a list of tuples of daily data and adds it to the
     MySQL database. Appends the vendor ID and symbol ID to the data.
+
+    Parameters
+    ----------
+    data_vendor_id : `int`
+        The ID of the data vendor (e.g. AlphaVantage)
+    symbol_id : `int`
+        The ID of the symbol (ticker) in the database
+    daily_data : `list`
+        A list of tuples containing price/volume data
     """
     now = dt.utcnow()
 
